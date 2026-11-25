@@ -1,0 +1,30 @@
+CAFÉTRACE UPEC — INICIO DE SESIÓN Y ROLES
+
+1. Abrir PowerShell en la carpeta que contiene manage.py y activar venv.
+2. pip install -r requirements.txt
+3. python manage.py makemigrations
+4. python manage.py migrate
+5. python manage.py crear_roles
+6. python manage.py createsuperuser
+7. python manage.py crear_usuario productor1 Productor
+   python manage.py crear_usuario bodega1 Bodega
+   python manage.py crear_usuario conductor1 Transportista
+   python manage.py crear_usuario catador1 "Control de calidad"
+   python manage.py crear_usuario cliente1 Cliente
+8. python manage.py runserver
+9. Abrir http://127.0.0.1:8000/acceder/
+
+IMPORTANTE: NO pegues la parte (venv) PS C:\...> en la terminal.
+El superusuario puede gestionar cuentas y grupos en /admin/.
+No hay registro libre de usuarios: las cuentas las crea un administrador.
+
+ROLES
+Productor: registra productores, fincas y lotes.
+Bodega: registra recepción, procesos, sensores, existencias y pedidos; despacha.
+Transportista: consulta pedidos y marca entregas; registra eventos logísticos.
+Control de calidad: crea cataciones y registra experimentos.
+Cliente: inicia sesión y consulta lotes; público QR sin iniciar sesión.
+
+SEGURIDAD: solución académica para entorno local, no desplegar como está a Internet.
+Configure SECRET_KEY, DEBUG, ALLOWED_HOSTS, HTTPS, controles adicionales, permisos por registros y protección de datos antes de producción.
+La humedad >12% y la demora >3 días son umbrales ilustrativos, no parámetros validados para todas las condiciones.

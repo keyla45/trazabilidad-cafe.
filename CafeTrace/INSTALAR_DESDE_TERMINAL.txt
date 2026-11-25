@@ -1,0 +1,20 @@
+CAFÉTRACE UPEC - VERSIÓN AMPLIADA
+
+IMPORTANTE: respalda db.sqlite3 antes de reemplazar archivos. Este ZIP NO incluye base de datos ni venv.
+
+En PowerShell, desde la carpeta CafeTrace con venv activado:
+python -m pip install -r requirements.txt
+python manage.py makemigrations trazabilidad
+python manage.py migrate
+python manage.py crear_roles
+python manage.py check
+python manage.py runserver
+
+Acceso: http://127.0.0.1:8000/acceder/
+
+FUNCIONES:
+Roles por grupo (Productor, Bodega, Transportista, Control de calidad, Cliente), QR, línea de tiempo, búsqueda y filtros, exportación CSV, dashboard, indicadores, alertas de humedad y catación, inventario, pedidos, transportes y experimentos E1-E3.
+
+DATOS: los valores de humedad 12% y catación 80 puntos son umbrales orientativos, deben validarse con la planta. No se inventan datos.
+
+NOTA: no se incluyen conexiones reales a sensores, Odoo, Power BI ni modelos predictivos.

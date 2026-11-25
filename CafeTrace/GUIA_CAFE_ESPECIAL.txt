@@ -1,0 +1,25 @@
+CAFÉTRACE UPEC - MÓDULO CAFÉ ESPECIAL
+
+Incluye flujos diferenciados: lavado, natural, honey y anaeróbico.
+Datos: VariedadCafe, EtapaEspecial, PerfilEspecial y PresentacionCafe.
+No se reemplazan otros módulos, colores, usuarios ni la base de datos existente.
+
+INSTALACIÓN EN POWERSHELL (uno a uno):
+python manage.py makemigrations trazabilidad
+python manage.py migrate
+python manage.py crear_roles
+python manage.py cargar_demo_especial
+python manage.py check
+python manage.py runserver
+
+INICIA SESIÓN y abre: http://127.0.0.1:8000/especial/
+Con usuario Bodega: registrar etapas, presentaciones y modificar método (sin etapas registradas).
+Con usuario Control de calidad: registrar/actualizar catación y cambiar método (sin etapas registradas).
+Administrador: ambos permisos; público QR reutiliza la página existente.
+
+IMPORTANTE: no borres db.sqlite3 ni venv. Realiza copia de seguridad previa.
+Los registros DEMO son sintéticos y NO representan resultados reales ni una catación oficial SCA.
+El método anaeróbico refiere a condiciones de proceso y no es mutuamente excluyente con el lavado/natural/honey en todas las situaciones: aquí se presenta como una ruta pedagógica diferenciada, configurable con el POE real.
+Los diagramas muestran etapas previstas, aunque no estén registradas; NO se inventan eventos reales.
+La catación usa campos descriptivos (escala interna 0-10) y puntaje total declarado según protocolo del operador.
+Se deben validar en la planta límites críticos, categorías comerciales y protocolos.

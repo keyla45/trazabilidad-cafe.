@@ -1,0 +1,18 @@
+CAFÉTRACE UPEC — MÓDULO CAFÉ ESPECIAL CON NUEVA INTERFAZ
+
+1. Respaldar tu carpeta anterior, especialmente db.sqlite3 y la carpeta de migraciones.
+2. Copiar el contenido del ZIP sobre el proyecto anterior, sin borrar db.sqlite3 ni venv.
+3. Terminal PowerShell en la raíz del proyecto:
+   python manage.py check
+   python manage.py migrate
+   python manage.py crear_roles
+   python manage.py cargar_demo_especial
+   python manage.py runserver
+4. Abrir http://127.0.0.1:8000/especial/
+
+El catálogo tiene filtro de métodos, búsqueda por lotes y tarjetas.
+Cada ficha tiene cuatro pestañas: flujo y DOP, catación, presentaciones, trazabilidad.
+Los botones de registro respetan los roles del sistema y usan las vistas existentes.
+Se mantienen datos reales y demostrativos por separado según las marcas existentes.
+Los diagramas son de referencia; no sustituyen mediciones reales ni protocolos oficiales.
+No eliminar db.sqlite3 ni crear migraciones falsas para instalar este cambio visual.

@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block title %}Calidad | CaféTrace{% endblock %}
+{% block content %}
+<div class="page-head"><div><p class="eyebrow">CONTROL DE CALIDAD</p><h1>Catación</h1></div></div>
+<div class="table-card"><table><thead><tr><th>Lote</th><th>Fecha</th><th>Puntaje</th><th>Defectos</th><th>Aroma</th><th>Sabor</th><th>Estado</th></tr></thead><tbody>
+{% for r in registros %}<tr><td><b>{{ r.lote.codigo }}</b></td><td>{{ r.fecha_catacion }}</td><td>{{ r.puntaje|default:"-" }}</td><td>{{ r.defectos }}</td><td>{{ r.aroma|default:"-" }}</td><td>{{ r.sabor|default:"-" }}</td><td><span class="badge">{{ r.estado }}</span></td></tr>{% empty %}<tr><td colspan="7">No hay registros de catación.</td></tr>{% endfor %}
+</tbody></table></div>
+{% endblock %}

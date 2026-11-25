@@ -1,0 +1,8 @@
+CAFÉTRACE — REDISEÑO DE PANTALLAS DENSAS
+Se actualizan el inicio y las vistas operativas, sin alterar modelos ni migraciones.
+Usa los archivos templates y static del ZIP.
+En PowerShell desde el proyecto: copia templates y static conservando db.sqlite3 y venv.
+Verifica: .\venv\Scripts\python.exe manage.py check
+Inicia: .\venv\Scripts\python.exe manage.py runserver
+Datos DEMO: .\venv\Scripts\python.exe manage.py cargar_demo_especial
+Integraciones reales IoT, Odoo, Power BI, ML: pendientes.

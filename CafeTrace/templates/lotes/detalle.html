@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}{{ lote.codigo }} | CaféTrace{% endblock %}
+{% block content %}<div class="card">{% if puede_calidad %}<a class="btn" href="{% url 'editar_calidad' lote.id %}">Editar catación</a>{% endif %} {% if puede_bodega or puede_transporte or puede_calidad %}<a class="btn" href="{% url 'crear_evento' lote.id %}">Añadir evento</a>{% endif %}</div>
+<div class="page-head">
+<div><p class="eyebrow">LOTE</p><h1>{{ lote.codigo }}</h1><p class="muted">{{ lote.variedad }} · {{ lote.metodo_proceso }}</p></div>
+<div><a class="btn" href="{% url 'trazabilidad_publica' lote.id %}">Vista pública</a><a class="btn secondary" href="{% url 'qr_lote' lote.id %}" target="_blank">Ver QR</a> <a class="btn secondary" href="{% url 'reporte_lote' lote.id %}">↓ Reporte CSV</a></div>
+</div>
+
+<div class="detail-grid">
+<div class="card">
+<h2>🌱 Origen</h2>
+<p><b>Productor:</b> {{ lote.productor.nombre }}</p>
+<p><b>Finca:</b> {{ lote.finca.nombre }}</p>
+<p><b>Ubicación:</b> {{ lote.finca.parroquia }}, {{ lote.finca.canton }}, {{ lote.finca.provincia }}</p>
+<p><b>Altitud:</b> {{ lote.finca.altura_msnm|default:"No registrada" }} msnm</p>
+<p><b>Variedad:</b> {{ lote.variedad }}</p>
+</div>
+<div class="card">
+<h2>📋 Proceso</h2>
+<p><b>Cosecha:</b> {{ lote.fecha_cosecha }}</p>
+<p><b>Cantidad:</b> {{ lote.cantidad_kg }} kg</p>
+<p><b>Método:</b> {{ lote.metodo_proceso }}</p>
+<p><b>Fermentación:</b> {{ lote.tiempo_fermentacion_horas|default:"-" }} horas</p>
+<p><b>Humedad:</b> {{ lote.humedad|default:"-" }} %</p>
+<p><b>Temp. secado:</b> {{ lote.temperatura_secado|default:"-" }} °C</p>
+</div>
+<div class="card">
+<h2>⭐ Calidad</h2>
+<p><b>Puntaje:</b> {{ calidad.puntaje|default:"Pendiente" }}</p>
+<p><b>Defectos:</b> {{ calidad.defectos }}</p>
+<p><b>Aroma:</b> {{ calidad.aroma|default:"-" }}</p>
+<p><b>Sabor:</b> {{ calidad.sabor|default:"-" }}</p>
+<p><b>Estado:</b> <span class="badge">{{ calidad.estado }}</span></p>
+</div>
+<div class="card">
+<h2>🔎 Código QR</h2>
+<img class="qr" src="{% url 'qr_lote' lote.id %}" alt="QR del lote">
+<p class="muted">Escanea para consultar la historia pública del lote.</p>
+</div>
+</div>
+
+<div class="card">
+<h2>🧭 Línea de tiempo de trazabilidad</h2>
+<div class="timeline">
+{% for evento in eventos %}
+<div class="event"><div class="dot"></div><div><b>{{ evento.etapa }}</b><span>{{ evento.fecha|date:"d/m/Y H:i" }} · {{ evento.ubicacion }}</span><p>{{ evento.detalle }}</p></div></div>
+{% empty %}<p>No hay eventos registrados.</p>{% endfor %}
+</div>
+</div>
+{% endblock %}

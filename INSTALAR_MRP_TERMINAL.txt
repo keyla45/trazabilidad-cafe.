@@ -1,0 +1,33 @@
+CaféTrace · Instalación desde PowerShell, sin abrir archivos Python
+
+1) Descarga CafeTrace_UPEC_Nueva_Cadena_MRP_5_Areas.zip. Guarda el ZIP en Descargas.
+2) Desde C:\Users\PC_1\Desktop\CafeTrace ejecuta Ctrl+C si hay un servidor activo.
+3) Copia este bloque completo EN LA TERMINAL:
+
+$nombre = 'CafeTrace_UPEC_Nueva_Cadena_MRP_5_Areas.zip'
+$zip = Get-ChildItem -Path $env:USERPROFILE -Recurse -File -Filter $nombre -ErrorAction SilentlyContinue | Sort-Object LastWriteTime -Descending | Select-Object -First 1
+if (-not $zip) { Write-Host 'No se encontro el ZIP. Descargalo primero.' -ForegroundColor Red } else {
+  $temporal = Join-Path $env:TEMP 'CafeTrace_MRP_Cinco_Areas'
+  if (Test-Path $temporal) { Remove-Item $temporal -Recurse -Force }
+  Expand-Archive -LiteralPath $zip.FullName -DestinationPath $temporal -Force
+  if (Test-Path '.\db.sqlite3') { Copy-Item '.\db.sqlite3' '.\db_respaldo_pre_MRP.sqlite3' -Force }
+  $raiz = Join-Path $temporal 'CafeTrace'
+  Copy-Item (Join-Path $raiz 'cadena') '.\cadena' -Recurse -Force
+  Copy-Item (Join-Path $raiz 'templates\*') '.\templates' -Recurse -Force
+  Copy-Item (Join-Path $raiz 'static\*') '.\static' -Recurse -Force
+  Copy-Item (Join-Path $raiz 'cafe_trace\urls.py') '.\cafe_trace\urls.py' -Force
+  Copy-Item (Join-Path $raiz 'cafe_trace\settings.py') '.\cafe_trace\settings.py' -Force
+  Write-Host 'Actualizacion visual y funcional copiada. Se conservaron la BD y las migraciones antiguas.' -ForegroundColor Green
+}
+
+4) EJECUTA UN COMANDO POR VEZ:
+.\venv\Scripts\python.exe -m pip install -r requirements.txt
+.\venv\Scripts\python.exe manage.py check
+.\venv\Scripts\python.exe manage.py migrate
+.\venv\Scripts\python.exe manage.py crear_roles
+.\venv\Scripts\python.exe manage.py cargar_demo_mrp
+.\venv\Scripts\python.exe manage.py runserver
+
+URL: http://127.0.0.1:8000/
+
+Nota: el instalador NO modifica trazabilidad/models.py ni los archivos historicos trazabilidad/migrations, reutilizados para conservar datos. Las carpetas templates y static se actualizan. Si ya has personalizado esas plantillas, haz una copia del proyecto antes.

@@ -1,0 +1,56 @@
+CAFÉTRACE UPEC — CONTINUACIÓN DEL CAPÍTULO 6 (TICS.pdf)
+
+BASE
+Se parte del proyecto CaféTrace_UPEC_Cafe_Especial_Interfaz_Visual.zip.
+Se preservan menú, diseño café-crema, autenticación y pantallas existentes.
+
+NOVEDADES
+- /capitulo-6/ centro de control: siete eslabones, cuatro procesos,
+  indicadores por consulta a la base, filtros, registros DEMO diferenciados.
+- /capitulo-6/lote/<id>/ auditoría de completitud documental,
+  flujo técnico específico, sensores, controles, historia y genealogía.
+- /capitulo-6/exportar/ archivo CSV para preparación de análisis y Power BI.
+- GenealogiaLote: lotes origen y resultantes para divisiones o mezclas.
+  Puede administrarse con usuario superadministrador en /admin/.
+- E1/E2/E3 visibles como registros pendientes o presentes; no hay
+  resultados experimentales inventados.
+
+INSTALACIÓN EN WINDOWS / VS CODE (comandos por separado)
+1. Cerrar el servidor con Ctrl+C si está funcionando.
+2. Hacer una COPIA COMPLETA de la carpeta CafeTrace actual.
+3. Conservar el db.sqlite3 que contiene tus registros, usuarios y roles.
+4. Descomprimir el ZIP y copiar el código del directorio CafeTrace sobre
+   tu carpeta existente. NO borres db.sqlite3 ni venv. Conserva también
+   tus archivos de migración si ya existen; no los reemplaces por un
+   directorio que solo tenga __init__.py.
+5. En tu carpeta CafeTrace con (venv) activo ejecutar UNO POR UNO:
+   python manage.py check
+   python manage.py makemigrations trazabilidad
+   python manage.py migrate
+   python manage.py crear_roles
+   python manage.py runserver
+6. Abrir http://127.0.0.1:8000/capitulo-6/ y acceder con admin.
+7. DATOS DE PRUEBA (opcional): python manage.py cargar_demo_especial
+
+ADVERTENCIAS
+- Se comprobó sintaxis de Python, no ejecución integral de Django.
+- No se incluye servidor MySQL, Odoo, MQTT, Power BI, predicción ni
+  agente IA realmente conectados: requieren credenciales, equipos,
+  configuración, calibración y pruebas.
+- La base preexistente usa SQLite. El PDF propone MySQL como objetivo.
+- Los valores DEMO son ficticios. Los registros no marcados DEMO no
+  constituyen automáticamente mediciones verificadas o certificaciones.
+- No se considera GS1 oficial un QR generado con URL simple. Un enlace
+  GS1 Digital Link requiere identificadores GS1 válidos y registrados.
+- Las fechas/reglas de exportación deben verificarse frente a normativa oficial.
+- E1: dispersión humedad / instrumentos. E2: MAE y R2 sobre lotes
+  no entrenados. E3: encuestas, escaneos y precios/ventas medidos.
+
+CÓDIGO AÑADIDO
+- trazabilidad/capitulo6_views.py
+- trazabilidad/models.py (GenealogiaLote)
+- trazabilidad/admin.py (gestión de genealogía)
+- cafe_trace/urls.py (tres rutas nuevas)
+- templates/base.html (acceso lateral)
+- templates/capitulo6/centro.html, auditoria.html
+- static/css/capitulo6.css

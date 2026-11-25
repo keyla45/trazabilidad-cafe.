@@ -1,0 +1,43 @@
+{% extends 'base.html' %}{% load static %}
+{% block title %}Centro digital · CaféTrace{% endblock %}
+{% block extra_head %}<link rel="stylesheet" href="{% static 'css/innovacion.css' %}">{% endblock %}
+{% block breadcrumb %}Herramientas digitales / Analítica{% endblock %}
+{% block content %}
+<section class="ct-hero"><div><span class="ct-eyebrow">CAFÉTRACE UPEC · DEMOSTRACIÓN FUNCIONAL</span><h1>Tu cadena del café, conectada.</h1><p>Consulta indicadores, navega con voz y sigue cada lote hasta el punto de venta. La información proviene de la base de datos; los ejemplos de práctica son ficticios.</p><a class="ct-btn" href="{% url 'cadena_catalogo' %}">Explorar cafés ↗</a><a class="ct-btn ct-ghost" href="{% url 'cadena_qrs' %}">Ver pasaportes QR ↗</a></div><div class="ct-hero-visual"><div class="ct-bubble">01 Origen → 02 Producción → 03 Almacén → 04 Distribución → 05 Tienda</div></div></section>
+<div class="ct-section-title"><h2>Estado de la cadena</h2><span>Datos registrados · No resultados experimentales</span></div>
+<section class="ct-metrics"><div><span>LOTES</span><strong>{{ m.lotes }}</strong><small>Con identificación</small></div><div><span>PRODUCTORES</span><strong>{{ m.productores }}</strong><small>Orígenes registrados</small></div><div><span>STOCK DE CAFÉ</span><strong>{{ m.stock_lotes_kg|floatformat:1 }} kg</strong><small>Saldo según movimientos</small></div><div><span>PEDIDOS</span><strong>{{ m.pedidos }}</strong><small>{{ m.pedidos_pendientes }} pendientes</small></div><div><span>PUNTOS DE VENTA</span><strong>{{ m.puntos_venta }}</strong><small>{{ m.ventas }} ventas registradas</small></div><div><span>INCIDENCIAS</span><strong>{{ m.incidencias_abiertas }}</strong><small>Abiertas</small></div></section>
+<section class="ct-layout">
+ <div class="ct-maincol">
+  <div class="ct-card ct-chatpanel" id="asistente-cafe" aria-label="Asistente operativo CaféTrace">
+    <div class="ct-cardhead"><div><span class="ct-eyebrow">CENTRO DE CONSULTAS · DATOS DE CAFÉTRACE</span><h2>Asistente operativo del café</h2><p>Pregunta por el inventario, un lote, sus procesos, los pedidos o la producción. Recibirás una explicación y un acceso a los registros.</p></div><span class="ct-chip">Solo lectura · Datos verificables</span></div>
+    <div class="ct-assistant-layout">
+      <div>
+        <div class="ct-chat-toolbar"><span><span class="ct-live-dot"></span> Asistente disponible</span><button type="button" id="ct-clear" class="ct-lightbutton">Limpiar conversación</button></div>
+        <div id="ct-chat" class="ct-chat" aria-live="polite" role="log"><div class="ct-msg bot"><b>Bienvenido a CaféTrace.</b> Soy un asistente guiado de la empresa. Puedes preguntar por un lote DEMO, la cantidad en almacén, pedidos o el recorrido de origen a tienda. No inventaré información ausente ni modificaré registros.</div></div>
+        <div id="ct-prompts" class="ct-prompts">
+          <button type="button" data-query="Dime el historial del lote DEMO-ESP-01">☕ Consultar lote DEMO</button>
+          <button type="button" data-query="¿Cuánto stock tenemos en almacén?">📦 Stock y saldos</button>
+          <button type="button" data-query="¿Cuántos pedidos están pendientes?">🚚 Estado de pedidos</button>
+          <button type="button" data-query="Explícame el recorrido guiado de las cinco áreas">🧭 Guía paso a paso</button>
+          <button type="button" data-query="¿Cómo funciona el MRP?">📋 Planificación MRP</button>
+          <button type="button" data-query="¿Cómo consulta un cliente el QR?">▣ QR del café</button>
+        </div>
+        <form id="ct-form" class="ct-form"><input id="ct-input" type="text" maxlength="240" autocomplete="off" placeholder="Escribe una pregunta o un código de lote..." aria-label="Pregunta para el asistente" required><button type="button" id="ct-mic" title="Dictar pregunta" aria-label="Activar reconocimiento de voz">🎙</button><button type="submit" id="ct-send">Enviar ↗</button></form>
+        <p class="ct-note" id="ct-voice-note">El micrófono utiliza las funciones del navegador cuando están disponibles. Su proveedor puede procesar audio; evita dictar datos personales.</p>
+      </div>
+      <aside class="ct-assistant-guide"><div class="ct-guide-heading"><span class="ct-eyebrow">RUTA OPERATIVA</span><h3>De la finca a la taza</h3><p>Recorre las cinco áreas con información de la empresa simulada. Cada etapa abre su módulo real.</p></div>
+      {% for g in guias %}<a href="{{ g.url }}" class="ct-guide-step"><span class="ct-guide-number">{{ forloop.counter|stringformat:"02d" }}</span><span><b>{{ g.titulo }}</b><small>{{ g.descripcion }}</small></span><span aria-hidden="true">↗</span></a>{% endfor %}
+      <a class="ct-guide-footer" href="{% url 'cadena_empresa_demo' %}">Ver empresa DEMO completa ↗</a></aside>
+    </div>
+  </div>
+  <div class="ct-card"><div class="ct-cardhead"><div><span class="ct-eyebrow">ANALÍTICA DE DATOS</span><h2>Tipos de café por proceso</h2></div><a href="{% url 'cadena_api_resumen' %}">Ver API JSON ↗</a></div>
+  <div class="ct-bars">{% for nombre,numero in m.por_metodo.items %}<div class="ct-barline"><span>{{ nombre }}</span><div><i style="width:{% widthratio numero m.lotes 100 %}%"></i></div><strong>{{ numero }}</strong></div>{% empty %}<p>No hay lotes registrados; utiliza el comando DEMO o registra un nuevo lote.</p>{% endfor %}</div><p class="ct-note">Distribución basada en lotes existentes, no proyección ni mediciones simuladas.</p></div>
+  <div class="ct-card"><div class="ct-cardhead"><h2>Últimos lotes</h2><a href="{% url 'lista_lotes' %}">Ver todos ↗</a></div><div class="ct-tablewrap"><table class="ct-table"><thead><tr><th>Código</th><th>Variedad</th><th>Proceso</th><th>Estado</th><th>Acción</th></tr></thead><tbody>{% for lote in lotes_recientes %}<tr><td><b>{{ lote.codigo }}</b></td><td>{{ lote.variedad }}</td><td>{{ lote.metodo_proceso }}</td><td><span class="ct-status">{{ lote.estado }}</span></td><td><a href="{% url 'detalle_lote' lote.id %}">Abrir ↗</a></td></tr>{% empty %}<tr><td colspan="5">Aún no hay lotes registrados.</td></tr>{% endfor %}</tbody></table></div></div>
+ </div>
+ <aside class="ct-sidecol"><div class="ct-card"><div class="ct-cardhead"><h2>Las cinco áreas</h2></div><div class="ct-links">{% for texto,url in enlaces %}<a href="{{ url }}"><span>{{ texto }}</span><span>↗</span></a>{% endfor %}</div></div>
+ <div class="ct-card ct-guide"><span class="ct-eyebrow">RECORRIDO GUIADO</span><h2>De la finca a la taza</h2><ol><li>Registra al productor y el lote.</li><li>Documenta el beneficio y la producción.</li><li>Confirma el movimiento de inventario.</li><li>Prepara y despacha un pedido.</li><li>Consulta el código QR y su historia.</li></ol><a class="ct-btn" href="{% url 'recorrido_demo' %}">Abrir práctica DEMO ↗</a></div>
+ <div class="ct-card"><div class="ct-cardhead"><h2>Últimos pedidos</h2></div>{% for p in pedidos_recientes %}<div class="ct-order"><b>{{ p.cliente }}</b><small>{{ p.lote.codigo }} · {{ p.cantidad_kg }} kg</small><span>{{ p.estado }}</span></div>{% empty %}<p class="ct-note">Sin pedidos registrados.</p>{% endfor %}</div>
+ </aside>
+</section>
+{% endblock %}
+{% block extra_js %}<script src="{% static 'js/innovacion.js' %}"></script>{% endblock %}

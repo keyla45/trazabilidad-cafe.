@@ -1,0 +1,11 @@
+CAFÉTRACE — CORRECCIONES COMPROBADAS ESTÁTICAMENTE
+
+Incluye: coincidencia de inventario del asistente ya validada por el usuario, separación de permisos por área, escritura de MRP para Producción, entradas/salidas para Almacén, ventas para Tienda, acceso de Distribución a pedidos, seguridad en API de lotes, acceso restringido a exportaciones y posibilidad de QR en LAN por CAFETRACE_ALLOWED_HOSTS.
+
+NO reemplaza modelos, migraciones ni base de datos. No hay despliegue público ni prueba completa en Django en este entorno.
+
+Pasos: extraer ZIP; desde la carpeta CafeTrace correr el script INSTALAR_CORRECCIONES.ps1 de la carpeta extraída (no sobre la carpeta comprimida). Ejecutar check, test cadena y luego runserver.
+
+Desde celular: la PC y el teléfono deben estar en la misma Wi-Fi; obtener IPv4 con ipconfig, ejecutar en la terminal de servidor $env:CAFETRACE_ALLOWED_HOSTS='192.168.X.Y' usando SU IP real, luego .\venv\Scripts\python.exe manage.py runserver 0.0.0.0:8000. Escanear QR generado desde la URL con la IP LAN (no 127.0.0.1). Permitir puerto 8000 en firewall solo en red privada si Windows lo solicita. Nunca exponer servidor development a internet.
+
+PENDIENTE: verificar enlaces de todas las tarjetas, catación real, inventario real contra conteo físico, ventas/despachos completos, usabilidad presencial, Odoo, sensores y despliegue permanente.

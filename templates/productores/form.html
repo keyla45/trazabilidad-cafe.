@@ -1,0 +1,5 @@
+{% extends "base.html" %}
+{% block title %}Nuevo productor | CaféTrace{% endblock %}
+{% block content %}
+<div class="form-card"><h1>👨‍🌾 Registrar productor</h1><form method="post">{% csrf_token %}{{ form.as_p }}<button class="btn" type="submit">Guardar productor</button> <a class="btn secondary" href="{% url 'lista_productores' %}">Cancelar</a></form></div>
+{% endblock %}

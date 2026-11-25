@@ -1,0 +1,17 @@
+CAFÉTRACE UPEC — LOGIN PREMIUM
+
+Esta entrega conserva la estructura Django y los roles del proyecto anterior.
+Incluye nueva pantalla de acceso con fotografía integrada localmente, animaciones CSS, diseño responsive, mostrar/ocultar contraseña y mensajes de validación.
+Se corrigió también la importación faltante login_required en trazabilidad/views.py.
+
+INSTALACIÓN
+1. Haz copia de seguridad de tu carpeta actual y de db.sqlite3 (si existe).
+2. Sustituye los archivos del proyecto por los de este ZIP. No elimines tu base de datos con registros reales.
+3. En la carpeta que contiene manage.py, activa venv y ejecuta:
+   pip install -r requirements.txt
+   python manage.py check
+   python manage.py migrate
+   python manage.py runserver
+4. Abre http://127.0.0.1:8000/acceder/
+
+NOTA: El login utiliza el sistema de autenticación original de Django. No se han implementado accesos externos como Google o Microsoft.

@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block title %}Fincas | CaféTrace{% endblock %}
+{% block content %}<p><a class="btn" href="{% url 'crear_finca' %}">+ Registrar finca</a></p>
+<div class="page-head"><div><p class="eyebrow">ORIGEN</p><h1>Fincas</h1></div></div>
+<div class="table-card"><table><thead><tr><th>Finca</th><th>Productor</th><th>Ubicación</th><th>Altitud</th><th>Variedad</th></tr></thead><tbody>
+{% for f in fincas %}<tr><td><b>{{ f.nombre }}</b></td><td>{{ f.productor.nombre }}</td><td>{{ f.parroquia }}, {{ f.canton }}, {{ f.provincia }}</td><td>{{ f.altura_msnm|default:"-" }} msnm</td><td>{{ f.variedad_principal|default:"-" }}</td></tr>{% empty %}<tr><td colspan="5">Las fincas se pueden registrar desde el panel Admin en esta primera versión.</td></tr>{% endfor %}
+</tbody></table></div>
+{% endblock %}

@@ -1,0 +1,52 @@
+from django.contrib import admin
+from django.contrib.auth import views as auth_views
+from django.urls import path, include
+from trazabilidad import views
+from trazabilidad import especial_views, capitulo6_views, integracion_views, demo_views
+from cadena import publico_views
+
+urlpatterns = [
+    path("explorar/", publico_views.catalogo_publico, name="catalogo_publico"),
+    path("explorar/cafe/<int:lote_id>/", publico_views.cafe_publico, name="cafe_publico"),
+    path("explorar/cafe/<int:lote_id>/qr/", views.qr_lote, name="cafe_qr_publico"),
+    path("", include("cadena.urls")),
+    path("demo/", demo_views.recorrido_demo, name="recorrido_demo"),
+    path("laboratorio/",integracion_views.laboratorio,name="laboratorio_cafe"),
+    path("laboratorio/exportar-sensores/",integracion_views.exportar_lecturas,name="exportar_lecturas"),
+    path("api/iot/lectura/",integracion_views.ingresar_sensor,name="api_iot_lectura"),
+    path("capitulo-6/", capitulo6_views.centro, name="capitulo6_centro"),
+    path("capitulo-6/lote/<int:lote_id>/", capitulo6_views.auditoria, name="capitulo6_auditoria"),
+    path("capitulo-6/exportar/", capitulo6_views.exportar, name="capitulo6_exportar"),
+    path('especial/', especial_views.catalogo, name='especial_catalogo'),
+    path('especial/lote/<int:lote_id>/', especial_views.detalle, name='especial_detalle'),
+    path('especial/lote/<int:lote_id>/metodo/', especial_views.metodo, name='especial_metodo'),
+    path('especial/lote/<int:lote_id>/etapa/<int:orden>/', especial_views.registrar_etapa, name='especial_etapa'),
+    path('especial/lote/<int:lote_id>/catacion/', especial_views.catacion, name='especial_catacion'),
+    path('especial/lote/<int:lote_id>/presentacion/', especial_views.presentacion, name='especial_presentacion'),
+    path("modulos/", views.cinco_modulos, name="cinco_modulos"),
+    path("cafe-especial/", views.cafe_especial, name="cafe_especial"),
+    path("acceder/", auth_views.LoginView.as_view(template_name="registration/login.html"), name="login"),
+    path("salir/", auth_views.LogoutView.as_view(), name="logout"),
+    path("lotes/<int:lote_id>/reporte/", views.reporte_lote, name="reporte_lote"),
+    path("alertas/", views.alertas, name="alertas"),
+    path("operacion/<str:nombre>/", views.modulo, name="modulo"),
+    path("operacion/<str:nombre>/nuevo/", views.modulo_nuevo, name="modulo_nuevo"),
+    path("fincas/nueva/", views.crear_finca, name="crear_finca"),
+    path("lotes/<int:lote_id>/catacion/", views.editar_calidad, name="editar_calidad"),
+    path("lotes/<int:lote_id>/evento/", views.crear_evento, name="crear_evento"),
+    path("indicadores/", views.indicadores, name="indicadores"),
+    path("api/lotes/", views.api_lotes, name="api_lotes"),
+    path("api/cedi/despacho/<int:pedido_id>/", views.api_cedi, name="api_cedi"),
+    path("pedidos/<int:pedido_id>/estado/", views.actualizar_pedido, name="actualizar_pedido"),
+    path("admin/", admin.site.urls),
+    path("panel-anterior/", views.inicio, name="panel_anterior"),
+    path("lotes/", views.lista_lotes, name="lista_lotes"),
+    path("lotes/nuevo/", views.crear_lote, name="crear_lote"),
+    path("lotes/<int:lote_id>/", views.detalle_lote, name="detalle_lote"),
+    path("lotes/<int:lote_id>/qr/", views.qr_lote, name="qr_lote"),
+    path("lotes/<int:lote_id>/publico/", views.trazabilidad_publica, name="trazabilidad_publica"),
+    path("productores/", views.lista_productores, name="lista_productores"),
+    path("productores/nuevo/", views.crear_productor, name="crear_productor"),
+    path("fincas/", views.lista_fincas, name="lista_fincas"),
+    path("calidad/", views.lista_calidad, name="lista_calidad"),
+]

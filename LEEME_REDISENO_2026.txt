@@ -1,0 +1,25 @@
+CAFÉTRACE UPEC | REDISEÑO VISUAL ENFOCADO EN CAFÉ ESPECIAL
+
+CAMBIOS
+- Interfaz café oscuro/crema en todo el proyecto, con menú lateral jerarquizado.
+- Panel de inicio: recorrido 7 eslabones, métodos lavado/natural/honey/anaeróbico, indicadores reales, gráficos, inventario, pedidos, alertas.
+- Catálogo de café especial: categorías más visuales, acceso a fichas, búsqueda.
+- Los módulos anteriores de finca, calidad, operaciones, inventario, distribución y QR permanecen.
+- No se inventan mediciones. Datos DEMO siempre deben identificarse como ficticios.
+- Servicios externos (ESP32/MQTT, Odoo, Power BI, modelo ML, LLM) no quedan conectados por cambios visuales.
+
+IMPORTANTE BASE DE DATOS
+Esta entrega es de actualización visual/plantillas, sin nuevos modelos ni migraciones.
+CONSERVA tu db.sqlite3 y la carpeta trazabilidad/migrations existente.
+Recomendado para evitar sustituir migraciones: copiar solo carpetas static y templates del ZIP al proyecto en uso.
+
+INSTALACION EN POWERSHELL (en C:\Users\PC_1\Desktop\CafeTrace)
+1. Detén el servidor con Ctrl+C
+2. Respalda la base:
+Copy-Item .\db.sqlite3 .\db_respaldo_antes_tema.sqlite3
+3. Extrae el ZIP en una carpeta temporal. Copia las carpetas static y templates de CafeTrace a tu proyecto. Si prefieres automatizar, usa el instalador actualizar_interfaz.ps1 entregado fuera de CafeTrace.
+4. Ejecuta:
+.\venv\Scripts\python.exe manage.py check
+.\venv\Scripts\python.exe manage.py runserver
+5. Visita http://127.0.0.1:8000/ y http://127.0.0.1:8000/especial/
+Recarga con Ctrl+F5 para descartar CSS antiguo.

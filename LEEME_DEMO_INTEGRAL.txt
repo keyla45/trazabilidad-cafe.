@@ -1,0 +1,20 @@
+CAFÉTRACE UPEC · MODO DEMOSTRACIÓN INTEGRAL
+
+NO eliminar db.sqlite3 ni la carpeta venv del proyecto existente. Haz respaldo.
+Instala el nuevo código en el proyecto conservando las migraciones y base existentes.
+
+Comandos uno por uno desde la carpeta CafeTrace:
+.\venv\Scripts\python.exe -m pip install -r requirements.txt
+.\venv\Scripts\python.exe manage.py check
+.\venv\Scripts\python.exe manage.py makemigrations trazabilidad
+.\venv\Scripts\python.exe manage.py migrate
+.\venv\Scripts\python.exe manage.py crear_roles
+.\venv\Scripts\python.exe manage.py cargar_demo_integral
+.\venv\Scripts\python.exe manage.py runserver
+
+Iniciar sesión y entrar a http://127.0.0.1:8000/demo/
+El QR abre http://127.0.0.1:8000/lotes/<id>/publico/ desde el navegador LOCAL.
+Para escanearlo con un celular distinto hace falta una URL accesible desde ese dispositivo; 127.0.0.1 apunta al propio celular y no al PC.
+Los datos DEMO son ficticios; no representan las mediciones o resultados de tesis.
+El comando puede repetirse: usa get_or_create y update_or_create para evitar duplicados.
+Las acciones de edición requieren permisos de usuario.

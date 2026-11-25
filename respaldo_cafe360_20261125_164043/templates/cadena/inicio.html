@@ -1,0 +1,135 @@
+{% extends 'base.html' %}{% load static %}
+{% block title %}Dashboard principal · CaféTrace{% endblock %}{% block breadcrumb %}Panel principal{% endblock %}
+{% block content %}
+<div class="c360-page">
+  <section class="c360-greeting">
+    <article class="c360-banner">
+      <span class="c360-kicker">☕ Buen día, equipo · operación cafetera conectada</span>
+      <h1>Del origen<br>a tu taza</h1>
+      <p>Trazabilidad, calidad, inventario, ventas y analítica del negocio en un solo lugar. Ingresa a las áreas operativas o explora el catálogo público con QR.</p>
+      <div class="c360-banner-actions">
+        <a class="c360-btn" href="{% url 'lista_lotes' %}">Ver trazabilidad →</a>
+        <a class="c360-btn-secondary" href="{% url 'catalogo_publico' %}">Explorar catálogo →</a>
+      </div>
+      <div class="c360-banner-dots"><span class="active"></span><span></span><span></span></div>
+    </article>
+    <article class="c360-summary">
+      <div class="c360-panel-head"><h2>Resumen ejecutivo</h2><span class="c360-range">🗓 Datos registrados · mensual</span></div>
+      <div class="c360-summary-grid">
+        <div class="c360-stat-card"><div class="top"><div class="icon">💵</div><h3>Ventas registradas</h3></div><strong>{{ k_ventas }}</strong><span class="c360-delta {{ c360_stats.variacion.ventas.tendencia|default:'igual' }}">{% if c360_stats.variacion.ventas.variacion_pct != None %}{{ c360_stats.variacion.ventas.variacion_pct }}% vs. mes anterior{% else %}Sin base para comparar{% endif %}</span></div>
+        <div class="c360-stat-card"><div class="top"><div class="icon">🧺</div><h3>Pedidos activos</h3></div><strong>{{ k_pedidos }}</strong><span class="c360-delta">{{ c360_stats.variacion.pedidos.actual }} pedidos este mes</span></div>
+        <div class="c360-stat-card"><div class="top"><div class="icon">⚙</div><h3>Lotes controlados</h3></div><strong>{{ k_lotes }}</strong><span class="c360-delta">{{ c360_stats.variacion.lotes.actual }} nuevos este mes</span></div>
+        <div class="c360-stat-card"><div class="top"><div class="icon">⚖</div><h3>Inventario total</h3></div><strong>{{ k_stock|floatformat:1 }} kg</strong><span class="c360-delta">Saldo según movimientos registrados</span></div>
+      </div>
+    </article>
+  </section>
+
+  <section class="c360-modulos" aria-label="Los cinco módulos principales de CaféTrace">
+    <div class="c360-panel-title c360-modulos-head"><div><span class="c360-eyebrow">CADENA PRODUCTIVA · ORIGEN Y TAZA</span><h2>Los 5 módulos de la empresa</h2><p>Selecciona un área para registrar operaciones o explicar cada etapa de la cadena cafetera.</p></div><a class="c360-mini-link" href="{% url 'cadena_empresa_demo' %}">Ver empresa DEMO →</a></div>
+      <section class="c360-area-grid c360-area-grid-top">
+        <a class="c360-area-card" href="{% url 'cadena_area' 'proveedor' %}"><span class="num">01 / 05</span><span class="ico">🌱</span><h4>Agricultor y proveedor</h4><p>Fincas, cosecha, beneficio y control de recepción del café.</p><small>Origen · beneficio · fincas</small></a>
+        <a class="c360-area-card" href="{% url 'cadena_area' 'produccion' %}"><span class="num">02 / 05</span><span class="ico">⚙</span><h4>Producción y logística</h4><p>Trilla, tostión, empaque, operarios, MRP y control del proceso.</p><small>Procesos · recetas · empaque</small></a>
+        <a class="c360-area-card" href="{% url 'cadena_area' 'almacen' %}"><span class="num">03 / 05</span><span class="ico">▣</span><h4>Almacén</h4><p>Entradas, salidas, materiales, inventario y movimiento por lote.</p><small>Kardex · stock · alertas</small></a>
+        <a class="c360-area-card" href="{% url 'cadena_area' 'distribucion' %}"><span class="num">04 / 05</span><span class="ico">🚚</span><h4>Distribución</h4><p>Pedidos, transporte, rutas y seguimiento hasta la entrega.</p><small>Despacho · rutas · entregas</small></a>
+        <a class="c360-area-card" href="{% url 'cadena_area' 'tienda' %}"><span class="num">05 / 05</span><span class="ico">☕</span><h4>Clientes y tienda</h4><p>Catálogo, presentaciones, precios, QR y ventas mayoristas y minoristas.</p><small>Tienda · catálogo · QR</small></a>
+      </section>
+  </section>
+
+  <section class="c360-main-grid">
+    <div class="c360-stack">
+      <section class="c360-duo">
+        <article class="c360-panel">
+          <div class="c360-panel-title"><h3>Estadísticas de operación</h3><a class="c360-mini-link" href="{% url 'cadena_estadisticas' %}">Ver analítica ↗</a></div>
+          <div class="c360-chart c360-chart-real" aria-label="Ventas mensuales registradas">
+            {% for fila in c360_stats.periodos %}
+            <div class="bar-col"><div class="bar-wrap"><div class="bar" style="height:{% widthratio fila.ventas c360_max_ventas 100 %}%"></div></div><b>{{ fila.ventas }}</b><span>{{ fila.mes|slice:'5:' }}</span></div>
+            {% endfor %}
+          </div>
+          <div class="line-summary"><div><strong>{{ c360_stats.variacion.ventas.actual }}</strong><small> ventas del mes en curso</small></div><div class="c360-delta">{% if c360_stats.variacion.ventas.variacion_pct != None %}{{ c360_stats.variacion.ventas.variacion_pct }}% vs. mes anterior{% else %}Sin comparación{% endif %}</div></div>
+        </article>
+        <article class="c360-panel">
+          <div class="c360-panel-title"><h3>Lotes de café (trazabilidad)</h3><a class="c360-mini-link" href="{% url 'lista_lotes' %}">Ver todos ↗</a></div>
+          {% if ultimos_lotes %}
+          {% with lote=ultimos_lotes.0 %}
+          <div class="c360-lote-card">
+            <div class="c360-thumb"></div>
+            <div class="c360-lote-meta"><b>{{ lote.codigo }}</b><div class="c360-lote-tags"><span class="c360-chip lilac">{{ lote.variedad }}</span><span class="c360-chip beige">{{ lote.finca.nombre }}</span><span class="c360-chip green">{{ lote.estado }}</span></div><p>{{ lote.metodo_proceso }} · cosecha {{ lote.fecha_cosecha|date:'M Y' }} · {{ lote.cantidad_kg }} kg</p></div>
+            <div class="c360-qr"><img src="{% url 'qr_lote' lote.id %}" alt="QR del lote {{ lote.codigo }}"><small>QR trazable</small></div>
+          </div>
+          {% endwith %}
+          {% endif %}
+          <p class="c360-reality">Etapas de referencia: revisa el historial del lote para confirmar cuáles están registradas.</p><div class="c360-flow">
+            <div class="c360-step"><span class="dot">1</span><span class="name">Finca</span><small>Origen</small></div>
+            <div class="c360-step"><span class="dot">2</span><span class="name">Beneficio</span><small>Proceso</small></div>
+            <div class="c360-step"><span class="dot">3</span><span class="name">Tostión</span><small>Transformación</small></div>
+            <div class="c360-step"><span class="dot">4</span><span class="name">Empaque</span><small>Producto</small></div>
+            <div class="c360-step"><span class="dot">5</span><span class="name">Tienda</span><small>Venta</small></div>
+          </div>
+        </article>
+        <article class="c360-panel c360-inventory">
+          <div class="c360-panel-title"><h3>Inventario</h3><a class="c360-mini-link" href="{% url 'cadena_area' 'almacen' %}">Ver detalle ↗</a></div>
+          <span class="kg">{{ k_stock|floatformat:1 }} kg</span>
+          <p class="c360-reality">Saldo total derivado de las entradas y salidas registradas. Consulta el Kardex para conocer los movimientos de cada lote.</p>
+          <a class="c360-btn-secondary" href="{% url 'cadena_area' 'almacen' %}">Consultar movimientos de café →</a>
+        </article>
+      </section>
+
+      <section class="c360-mini-cards">
+        <article class="c360-mini"><div class="c360-panel-title"><h3>Pedidos</h3><span class="c360-delta">{{ c360_stats.variacion.pedidos.actual }} este mes</span></div><strong>{{ k_pedidos }}</strong><small>solicitudes activas en preparación o despacho</small></article>
+        <article class="c360-mini"><div class="c360-panel-title"><h3>Productores</h3><span class="c360-delta">Origen registrado</span></div><strong>{{ k_productores }}</strong><small>agricultores y proveedores registrados en la cadena</small></article>
+      </section>
+
+      <section class="c360-panel">
+        <div class="c360-panel-title"><h3>Productos destacados</h3><a class="c360-mini-link" href="{% url 'cadena_catalogo' %}">Ver catálogo ↗</a></div>
+        <div class="c360-products">
+          {% for producto in c360_productos %}
+          <article class="c360-product">
+            <div class="c360-product-photo"><span class="c360-bag-label">{{ producto.marca.nombre|truncatechars:22 }}</span></div>
+            <h4>{{ producto.titulo|truncatechars:38 }}</h4>
+            <div class="meta"><span class="c360-chip lilac">{{ producto.especie }}</span><span class="c360-chip beige">{{ producto.formato }}</span></div>
+            <small>{{ producto.gramos }} g · {{ producto.lote.finca.nombre }}</small>
+            <div class="price"><span>$ {{ producto.precio_usd|floatformat:2 }} USD</span><a class="c360-buy" href="{% url 'catalogo_publico' %}" aria-label="Ver producto en catálogo">🛒</a></div>
+          </article>
+          {% empty %}
+          <p class="c360-empty">No hay productos publicados todavía. Puedes cargar el catálogo DEMO desde Administración.</p>
+          {% endfor %}
+        </div>
+      </section>
+
+
+    </div>
+
+    <aside class="c360-side">
+      <section class="c360-panel c360-analytics">
+        <div class="c360-panel-title"><h3>Analítica del negocio</h3><a class="c360-mini-link" href="{% url 'cadena_estadisticas' %}">Ver evolución ↗</a></div>
+        <div class="c360-month-bars c360-real-month-bars" aria-label="Pedidos registrados por mes">
+          {% for fila in c360_stats.periodos %}
+          <div><span style="height:{% widthratio fila.pedidos c360_max_pedidos 100 %}%"></span><small>{{ fila.mes|slice:'5:' }}</small></div>
+          {% endfor %}
+        </div>
+        <div class="c360-metrics-grid">
+          <div class="c360-metric-box"><span>Pedidos este mes</span><b>{{ c360_stats.variacion.pedidos.actual }}</b><small>Mensual</small></div>
+          <div class="c360-metric-box"><span>Ingresos registrados</span><b>$ {{ c360_stats.variacion.ingresos_usd.actual|floatformat:2 }}</b><small>USD este mes</small></div>
+        </div>
+        <p class="c360-reality">Datos reales de la base (incluyendo registros DEMO). El mes actual puede estar incompleto.</p>
+      </section>
+
+      <section class="c360-panel c360-assistant">
+        <div class="c360-panel-title"><h3>Asistente CaféTrace</h3><span class="c360-chip green">Disponible</span></div>
+        <div class="bubble"><span class="c360-bot">🤖</span><div><b>Pregúntame sobre tus ventas, inventario, lotes o clientes.</b><p>También te guío hacia la pantalla exacta del aplicativo.</p></div></div>
+        <div class="c360-suggest">
+          <a href="{% url 'cadena_herramientas' %}">📈 Consultar estadísticas y ventas</a>
+          <a href="{% url 'cadena_area' 'almacen' %}">📦 Muéstrame el inventario</a>
+          <a href="{% url 'cadena_catalogo' %}">🔥 Consultar productos del catálogo</a>
+        </div>
+        <a class="c360-chatbox c360-open-assistant" href="{% url 'cadena_herramientas' %}">💬 Abrir conversación con el asistente <span>➤</span></a>
+      </section>
+
+      <section class="c360-panel">
+        <div class="c360-panel-title"><h3>Catálogo público</h3><a class="c360-mini-link" href="{% url 'catalogo_publico' %}">Abrir ↗</a></div>
+        <div class="c360-catalog-card"><div><p>Tu vitrina pública de cafés para clientes, distribuidores y visitantes. Consulta presentaciones, precios publicados y QR de trazabilidad.</p><span class="c360-chip green">Acceso público</span><div class="c360-banner-actions" style="margin-top:14px"><a class="c360-btn" href="{% url 'catalogo_publico' %}">Ver catálogo →</a></div></div><div class="c360-laptop"></div></div>
+      </section>
+    </aside>
+  </section>
+</div>
+{% endblock %}

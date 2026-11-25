@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block title %}Café especial | CaféTrace{% endblock %}
+{% block content %}
+<div class="dashboard-intro"><div><div class="dashboard-eyebrow">PERFIL DIGITAL DE CALIDAD · CAPÍTULO 6</div><h1>Café de especialidad</h1><p>Microlotes de alta calidad con procedencia y catación verificables.</p></div><div class="heading-buttons"><a class="outline-button" href="{% url 'cinco_modulos' %}">← Cinco módulos</a></div></div>
+<div class="special-banner"><strong>{{ total }}</strong><span>lotes destacados</span><p>{{ criterio }}</p></div>
+<div class="five-grid">
+{% for lote in lotes %}<article class="five-card"><span class="five-number">{{ lote.codigo }}</span><span class="five-emoji">☕</span><h2>{{ lote.variedad }}</h2><p>{{ lote.finca.nombre }} · {{ lote.productor.nombre }} · {{ lote.metodo_proceso }}</p><strong>Catación: {{ lote.calidad.puntaje }} / 100</strong><p>Aroma: {{ lote.calidad.aroma|default:"Sin registrar" }}. Sabor: {{ lote.calidad.sabor|default:"Sin registrar" }}.</p><div class="five-links"><a href="{% url 'detalle_lote' lote.id %}">Ficha interna →</a><a href="{% url 'trazabilidad_publica' lote.id %}" target="_blank" rel="noopener">Origen público →</a><a href="{% url 'qr_lote' lote.id %}" target="_blank" rel="noopener">Código QR →</a></div></article>{% empty %}<article class="five-card"><h2>Sin lotes especiales</h2><p>Registra un lote, una catación y aprueba su calidad para verlo aquí. También puedes cargar el conjunto DEMO.</p></article>{% endfor %}
+</div>
+{% endblock %}

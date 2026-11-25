@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Nuevo lote | CaféTrace{% endblock %}
+{% block content %}
+<div class="form-card">
+<h1>☕ Registrar lote de café</h1>
+<p class="muted">El sistema generará automáticamente un código único de trazabilidad.</p>
+<form method="post">{% csrf_token %}
+{{ form.as_p }}
+<button class="btn" type="submit">Guardar lote</button>
+<a class="btn secondary" href="{% url 'lista_lotes' %}">Cancelar</a>
+</form>
+</div>
+{% endblock %}

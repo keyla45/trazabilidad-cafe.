@@ -1,0 +1,61 @@
+{% load static %}
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Iniciar sesión | CaféTrace UPEC</title>
+<link rel="stylesheet" href="{% static 'css/login-premium.css' %}">
+<style>.catalog-enter{display:block;margin-top:13px;padding:14px 18px;text-align:center;background:#4c2b1d;color:#fff!important;border-radius:13px;font-weight:800;text-decoration:none;box-shadow:0 9px 22px #53331b2d}.catalog-enter:hover{background:#745038}</style></head>
+<body>
+<div class="login-shell">
+  <aside class="story" aria-label="Origen y trazabilidad del café">
+    <div class="story-photo"></div><div class="story-shade"></div>
+    <div class="story-top"><span class="symbol" aria-hidden="true">✦</span><span>CAFÉTRACE <small>· UPEC</small></span></div>
+    <div class="story-content">
+       <div class="tag"><span class="dot"></span> TRAZABILIDAD DEL CAFÉ</div>
+       <h1>Del origen<br><em>a tu taza.</em></h1>
+       <p>Cada grano tiene una historia. Conectamos fincas, procesos y calidad en una sola plataforma.</p>
+       <div class="story-features">
+         <div><span>01</span><strong>Origen verificable</strong></div>
+         <div><span>02</span><strong>Calidad por lote</strong></div>
+         <div><span>03</span><strong>Recorrido con QR</strong></div>
+       </div>
+    </div>
+    <div class="story-bottom"><span>Una cadena más transparente, de la finca al consumidor.</span><span class="mini-bean" aria-hidden="true">✺</span></div>
+  </aside>
+  <main class="access">
+    <div class="ambient ambient-one"></div><div class="ambient ambient-two"></div>
+    <div class="access-inner">
+      <div class="brand"><span class="brand-mark" aria-hidden="true">☕</span><div><strong>Café<span>Trace</span></strong><small>PLATAFORMA DE TRAZABILIDAD · UPEC</small></div></div>
+      <div class="welcome"><span class="welcome-overline">BIENVENIDO DE NUEVO</span><h2>Inicia sesión</h2><p>Ingresa tus credenciales para gestionar la historia y la calidad de cada lote.</p></div>
+      {% if form.errors %}<div class="error" role="alert">Usuario o contraseña incorrectos. Vuelve a intentarlo.</div>{% endif %}
+      {% if next and user.is_authenticated %}<div class="error" role="alert">Tu cuenta no tiene permiso para acceder a esta página.</div>{% endif %}
+      <form method="post" class="login-form" id="loginForm" action="{% url 'login' %}">
+        {% csrf_token %}
+        <div class="field"><label for="id_username">Usuario</label><div class="input-wrap"><span class="input-icon" aria-hidden="true">♙</span><input type="text" name="username" id="id_username" placeholder="Ingresa tu usuario" required autocomplete="username" autofocus value="{{ form.username.value|default_if_none:'' }}"></div></div>
+        <div class="field"><div class="label-line"><label for="id_password">Contraseña</label></div><div class="input-wrap"><span class="input-icon" aria-hidden="true">♧</span><input type="password" name="password" id="id_password" placeholder="Ingresa tu contraseña" required autocomplete="current-password"><button class="show-pass" id="togglePassword" type="button" aria-label="Mostrar contraseña" aria-pressed="false">Mostrar</button></div></div>
+        <input type="hidden" name="next" value="{{ next|default:'' }}">
+        <button class="submit" type="submit"><span>Ingresar a CaféTrace</span><span aria-hidden="true">↗</span></button>
+      </form>
+      <div class="help"><span class="help-icon" aria-hidden="true">ⓘ</span><p>¿No tienes una cuenta? Solicita acceso al administrador de CaféTrace.</p></div>
+      <div class="public-access"><span>¿Quieres conocer nuestros cafés?</span><p>Entra al catálogo público sin usuario ni contraseña. Consulta precios, presentaciones y el proceso de cada lote.</p><a class="catalog-enter" href="{% url 'catalogo_publico' %}">☕ Explorar catálogo y tienda →</a></div>
+    </div>
+    <div class="access-footer"><span>© CaféTrace UPEC · Gestión y calidad del café</span><span>Acceso seguro</span></div>
+  </main>
+</div>
+<script>
+(function(){
+  const button=document.getElementById('togglePassword');
+  const password=document.getElementById('id_password');
+  button.addEventListener('click',function(){
+    const visible=password.type==='password';
+    password.type=visible?'text':'password';
+    button.textContent=visible?'Ocultar':'Mostrar';
+    button.setAttribute('aria-pressed',String(visible));
+    button.setAttribute('aria-label',visible?'Ocultar contraseña':'Mostrar contraseña');
+  });
+  const form=document.getElementById('loginForm');
+  form.addEventListener('submit',function(){const submit=form.querySelector('.submit'); if(form.checkValidity()){submit.classList.add('busy');submit.querySelector('span').textContent='Verificando acceso…';}});
+})();
+</script>
+</body></html>

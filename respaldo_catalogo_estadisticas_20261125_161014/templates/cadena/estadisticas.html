@@ -1,0 +1,14 @@
+{% extends 'base.html' %}{% load static %}
+{% block title %}Estadísticas · CaféTrace{% endblock %}
+{% block extra_head %}<link rel="stylesheet" href="{% static 'css/estadisticas-cafe.css' %}">{% endblock %}
+{% block content %}
+<section class="est-header"><span>INTELIGENCIA DE NEGOCIO · CAFÉTRACE</span><h1>Estadísticas de la cadena del café</h1><p>Compara ventas, pedidos y movimientos con datos registrados. Las cifras DEMO no son ventas reales.</p><a href="{% url 'cadena_herramientas' %}">← Herramientas digitales</a></section>
+<div class="est-nota">{{ data.nota }}</div>
+<section class="est-kpis">
+{% for nombre,d in data.variacion.items %}<article><span>{% if nombre == 'ingresos_usd' %}INGRESOS (USD){% elif nombre == 'entradas_kg' %}ENTRADAS (KG){% elif nombre == 'salidas_kg' %}SALIDAS (KG){% else %}{{ nombre|upper }}{% endif %}</span><strong>{{ d.actual|floatformat:2 }}</strong><div class="est-delta {% if d.tendencia == 'sube' %}up{% elif d.tendencia == 'baja' %}down{% endif %}">{% if d.tendencia == 'sube' %}↗ Sube{% elif d.tendencia == 'baja' %}↘ Baja{% else %}→ Sin cambio{% endif %} · {{ d.diferencia|floatformat:2 }}{% if d.variacion_pct != None %} ({{ d.variacion_pct }} %){% else %} · sin base previa{% endif %}</div></article>{% endfor %}
+</section>
+<div class="est-grid"><section class="est-panel"><div class="est-head"><div><span>COMPARATIVA TEMPORAL</span><h2>¿Qué está subiendo o bajando?</h2></div><select id="est-metrica" aria-label="Indicador"><option value="ventas">Ventas (operaciones)</option><option value="ingresos_usd">Ingresos registrados (USD)</option><option value="pedidos">Pedidos</option><option value="lotes">Lotes creados</option><option value="entradas_kg">Entradas de café (kg)</option><option value="salidas_kg">Salidas de café (kg)</option></select></div><div id="est-grafica" class="est-chart" role="img" aria-label="Gráfico de barras mensual"></div><p class="est-foot">El mes actual puede estar incompleto. Los movimientos y los datos de práctica forman parte de los registros mostrados.</p></section>
+<section class="est-panel"><span>RESUMEN RECIENTE</span><h2>Últimos seis meses</h2><div class="est-table"><table><thead><tr><th>Mes</th><th>Ventas</th><th>Pedidos</th><th>Ingresos</th></tr></thead><tbody>{% for r in data.periodos %}<tr><td>{{ r.mes }}</td><td>{{ r.ventas }}</td><td>{{ r.pedidos }}</td><td>${{ r.ingresos_usd|floatformat:2 }}</td></tr>{% endfor %}</tbody></table></div></section></div>
+{{ data.periodos|json_script:'est-datos' }}
+<script src="{% static 'js/estadisticas-cafe.js' %}" defer></script>
+{% endblock %}

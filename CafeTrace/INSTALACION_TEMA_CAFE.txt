@@ -1,0 +1,26 @@
+CAFÉTRACE UPEC — TEMA CAFÉ Y CREMA
+================================
+Esta versión conserva la estructura Django, login, módulos y roles del proyecto anterior.
+El cambio principal es la interfaz visual del panel y la navegación.
+Los indicadores provienen de la base de datos: no se cargaron datos de demostración.
+
+INSTALACIÓN SEGURA EN WINDOWS / POWERSHELL
+
+1. Detener el servidor con CTRL + C.
+2. Guardar una copia de la carpeta CafeTrace actual.
+3. Descomprimir el ZIP en una carpeta temporal.
+4. Copiar el contenido de la carpeta CafeTrace del ZIP a su carpeta CafeTrace existente.
+   Reemplazar únicamente archivos de código y recursos web, no eliminar db.sqlite3 ni venv.
+   NO borrar ni sobrescribir la base de datos actual ni sus migraciones ya generadas.
+5. Con (venv) activo, en la carpeta que contiene manage.py ejecutar UNO POR UNO:
+
+   python manage.py check
+   python manage.py makemigrations trazabilidad
+   python manage.py migrate
+   python manage.py runserver
+
+6. Abrir http://127.0.0.1:8000/acceder/
+7. Si se ve el diseño anterior, refrescar con CTRL + F5.
+
+NOTA: Este ZIP no contiene db.sqlite3 ni venv; los datos existentes permanecen en su instalación.
+Integraciones Odoo / MQTT / Power BI no quedan activadas por este cambio de interfaz.

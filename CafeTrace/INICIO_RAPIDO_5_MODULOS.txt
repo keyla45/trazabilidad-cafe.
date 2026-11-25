@@ -1,0 +1,41 @@
+CAFÉTRACE UPEC — CINCO MÓDULOS Y DATOS FICTICIOS
+===============================================
+IMPORTANTE: NO BORRES db.sqlite3 NI LA CARPETA venv DE TU PROYECTO.
+Este ZIP contiene código. No incluye cuentas, claves ni bases de datos reales.
+
+1) Realiza una copia de seguridad de tu carpeta actual.
+2) Copia los archivos de esta carpeta CafeTrace encima de tu proyecto CafeTrace.
+3) Abre la terminal PowerShell en C:\Users\PC_1\Desktop\CafeTrace.
+4) Ejecuta los comandos de UNO EN UNO (sin copiar PS> ni >>):
+
+python manage.py check
+python manage.py makemigrations trazabilidad
+python manage.py migrate
+python manage.py crear_roles
+python manage.py cargar_demo
+python manage.py runserver
+
+5) Ingresa en http://127.0.0.1:8000/acceder/ con tu admin anterior.
+6) Abre http://127.0.0.1:8000/modulos/ para ver los CINCO módulos:
+   1. Origen y recepción
+   2. Producción
+   3. Café especial (catación y perfil de lotes aprobados)
+   4. Inventario y distribución
+   5. Trazabilidad y QR
+
+Los lotes y nombres DEMO son datos completamente ficticios para pruebas.
+NO son resultados científicos ni lecturas IoT auténticas.
+El dashboard presenta cantidades basadas en registros almacenados.
+El módulo 'Café especial' filtra lotes aprobados y catación >=80 como
+criterio ILUSTRATIVO para el prototipo, no como certificación SCA.
+
+ROL: Superusuario accede a todos los módulos. Para usuarios adicionales:
+python manage.py crear_usuario productor1 Productor
+python manage.py crear_usuario bodega1 Bodega
+python manage.py crear_usuario conductor1 Transportista
+python manage.py crear_usuario catador1 "Control de calidad"
+python manage.py crear_usuario cliente1 Cliente
+
+REQUISITOS: dependencias instaladas previamente con pip install -r requirements.txt.
+En caso de error, detén la secuencia y comparte el primer traceback.
+Las integraciones reales IoT, Odoo, BI e IA no están implementadas.

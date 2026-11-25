@@ -1,0 +1,26 @@
+CAFÉTRACE UPEC · DASHBOARD PROFESIONAL
+=======================================
+NUEVO PANEL: menú lateral responsive, 5 KPI principales, gráfico mensual,
+gráfico de estado, últimas entradas, resumen logístico, accesos por rol.
+Las cifras corresponden a la base de datos; NO son datos inventados.
+
+INSTALACIÓN EN WINDOWS (desde PowerShell)
+1. Haz una copia de la carpeta CafeTrace actual y de db.sqlite3.
+2. Descomprime el ZIP y reemplaza los archivos de código del proyecto.
+3. Conserva la base de datos db.sqlite3 existente y el entorno virtual venv.
+4. Abre la terminal dentro de CafeTrace, con (venv) activado.
+5. Ejecuta UNO POR UNO:
+   pip install -r requirements.txt
+   python manage.py check
+   python manage.py makemigrations trazabilidad
+   python manage.py migrate
+   python manage.py crear_roles
+   python manage.py runserver
+6. Abre http://127.0.0.1:8000/acceder/
+
+NOTAS
+- Se mantiene el login premium anterior y las rutas existentes.
+- Productor, calidad, bodega, transportista y admin disponen de sus menús según rol.
+- Se incluyen los registros y operaciones ya desarrollados en la versión anterior.
+- Las conexiones externas Odoo/IoT/Power BI aún no están integradas.
+- Si no existen datos, el dashboard muestra ceros y estados vacíos.
