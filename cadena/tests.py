@@ -125,10 +125,16 @@ class EmpresaSimuladaTest(TestCase):
 
 class CatalogoPublicoQRTest(TestCase):
     def test_catalogo_sin_inicio_de_sesion(self):
+        from django.core.management import call_command
+        from io import StringIO
+
+        call_command('cargar_catalogo_marcas', stdout=StringIO())
         respuesta=self.client.get(reverse('catalogo_publico'))
         self.assertEqual(respuesta.status_code,200)
-        self.assertContains(respuesta,'Nuestros cafés')
-        self.assertContains(respuesta,'Acceso a administración')
+        self.assertContains(respuesta,'Catálogo de cafés y marcas')
+        self.assertContains(respuesta,'DEMO · Origen y Taza')
+        self.assertContains(respuesta,'Geisha')
+        self.assertContains(respuesta,reverse('login'))
 
     def test_login_ofrece_catalogo_publico(self):
         respuesta=self.client.get(reverse('login'))
